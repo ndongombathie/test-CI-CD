@@ -1,0 +1,36 @@
+name: CI/CD PHP Docker
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1️⃣ Récupérer le code
+      - uses: actions/checkout@v3
+
+      # 2️⃣ Installer PHP (si besoin pour tests)
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+
+      # 3️⃣ Installer les dépendances si Laravel
+      # - name: Install Composer dependencies
+      #   run: composer install --no-progress --no-suggest --prefer-dist
+
+      # 4️⃣ Lancer les tests unitaires
+      # - name: Run PHPUnit tests
+      #   run: vendor/bin/phpunit
+
+      # 5️⃣ Construire l'image Docker
+      - name: Build Docker image
+        run: docker build -t mon-projet-php .
+
+      # 6️⃣ Déployer (exemple local avec Docker)
+      - name: Run Docker container
+        run: docker run -d -p 8080:80 mon-projet-php
